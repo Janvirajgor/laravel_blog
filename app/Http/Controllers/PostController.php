@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\product;
+use App\Models\Post;
 
-class ProductController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = product::latest()->paginate(5);
+        $data = Post::latest()->paginate(5);
 
-        return view('product.index', compact('data'))
+        return view('post.index', compact('data'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -27,7 +27,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.create');
+        return view('post.create');
     }
 
     /**
@@ -38,15 +38,21 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+        $userID = auth()->user()->id;
+        Post::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'user_id' => $userID
         ]);
+        // $request->validate([
+        //     'title' => 'required',
+        //     'description' => 'required',
+        // ]);
 
-        product::create($request->all());
+        // post::create($request->all());
 
-        return redirect()->route('product.index')
-            ->with('success', 'Product created successfully.');
+        return redirect()->route('post.index')
+            ->with('success', 'Post created successfully.');
     }
 
     /**
@@ -55,9 +61,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(product $product)
+    public function show(Post $post)
     {
-        return view('product.show', compact('product'));
+        return view('post.show', compact('post'));
     }
 
     /**
@@ -66,9 +72,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(product $product)
+    public function edit(Post $post)
     {
-        return view('product.edit', compact('product'));
+        return view('post.edit', compact('post'));
     }
 
     /**
@@ -78,17 +84,17 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, product $product)
+    public function update(Request $request, Post $post)
     {
         $request->validate([
             'title' => 'required',
             'description' => 'required',
         ]);
 
-        $product->update($request->all());
+        $post->update($request->all());
 
-        return redirect()->route('product.index')
-            ->with('success', 'Product updated successfully');
+        return redirect()->route('post.index')
+            ->with('success', 'Post updated successfully');
     }
 
     /**
@@ -97,11 +103,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(product $product)
+    public function destroy(Post $post)
     {
-        $product->delete();
+        $post->delete();
 
-        return redirect()->route('product.index')
-            ->with('success', 'Product deleted successfully');
+        return redirect()->route('post.index')
+            ->with('success', 'Post deleted successfully');
     }
 }

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PostController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +21,8 @@ Route::get('/', function () {
 });
 
 Route::resource('product', ProductController::class);
+
+Route::resource('post', PostController::class);
 
 Auth::routes();
 
