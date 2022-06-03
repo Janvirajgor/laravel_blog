@@ -6,7 +6,7 @@
                 <a href="{{ route('post.index') }}" class="btn btn-outline-primary btn-sm">Go back</a>
                 <hr>
                 @if ($post->image)
-                    <img src="{{ asset($post->image) }}" style="height: 300px; width:300px;" alt="{{ $post->title }} photo" class="img-fluid">
+                    <img src="{{ asset($post->image) }}" style="height: 300px; width:450px;" alt="{{ $post->title }} photo" class="img-fluid">
                 @endif
                 <h1 class="display-one" style="color:cadetblue">{{ ucfirst($post->title) }}</h1>
                 
@@ -23,7 +23,7 @@
                 <hr>
                 <a href="{{ route('post.edit', $post->id)}}" class="btn btn-outline-primary">Edit Post</a>
                 <br><br>
-                
+
                 <form id="delete-frm" class="" action="" method="POST">
                     @method('DELETE')
                     @csrf

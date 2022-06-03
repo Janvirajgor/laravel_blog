@@ -17,8 +17,7 @@ class PostController extends Controller
     {
         $data = Post::latest()->paginate(3);
 
-        return view('post.index', compact('data'));    
-        // ->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('post.index', compact('data'));
     }
 
     /**
