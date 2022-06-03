@@ -12,8 +12,20 @@ class Post extends Model
         'title', 'description', 'user_id', 'image'
     ];
 
+    //comments
     public function comments()
     {
         return $this->hasMany(Comment::class)->whereNull('parent_id');
+    }
+
+    // Likes
+    public function likes()
+    {
+        return $this->hasMany('App\Models\LikeDislike', 'post_id')->sum('like');
+    }
+    // Dislikes
+    public function dislikes()
+    {
+        return $this->hasMany('App\Models\LikeDislike', 'post_id')->sum('dislike');
     }
 }

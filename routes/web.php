@@ -28,3 +28,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('post', PostController::class);
 
 Route::resource('comments', CommentController::class)->only(['store']);
+
+Route::post('save-likedislike','PostController@save_likedislike');
