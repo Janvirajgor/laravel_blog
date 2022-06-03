@@ -23,15 +23,21 @@
                 @forelse ($data as $post)             
                 <div class="container-item">
                         @if ($post->image)
-                            <img src="{{ asset('storage/images/' . $post->image) }}" alt="{{ $post->title }} photo" class="img-fluid">
+                            <img src="{{ asset($post->image) }}" style="height: 150px; width:150px;" alt="{{ $post->title }} photo" class="img-fluid">
                         @endif
                        
                         <h1 class="display-one">
                             <a class="showdata" style="text-decoration: none; color:cadetblue" href="{{ route('post.show', $post->id)}}"> {{ ucfirst($post->title) }} </a>
                         </h1>
                  
-                        <p> Created at: {{$post->created_at}}   
-                            Updated at: {{$post->updated_at}} </p>
+                        @if($post->created_at == NULL)
+                            <span class="text-danger">No Date Set</span>
+                         @else
+                            Created at:
+                                {{ Carbon\Carbon::parse($post->created_at)->diffForHumans() }}
+                                <br> Updated at:
+                                {{ Carbon\Carbon::parse($post->updated_at)->diffForHumans() }}
+                        @endif
                         <h4> {!! $post->description !!} </h4>
                         <hr>
                    

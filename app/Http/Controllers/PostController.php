@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Support\Carbon;
 
 class PostController extends Controller
 {
@@ -14,10 +15,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $data = Post::latest()->paginate(5);
+        $data = Post::latest()->paginate(3);
 
-        return view('post.index', compact('data'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('post.index', compact('data'));    
+        // ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -38,18 +39,41 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate(
+            [
+                'title' => 'required',
+                'description' => 'required',
+                // 'post_image' => 'required|mimes:jpg.jpeg.png',
+            ],
+            [
+                'title.required' => 'Please Enter Post title',
+                'description.required' => 'Please Enter Post description',
+                // 'post_image.required' => 'please select any image'
+            ]
+        );
         $userID = auth()->user()->id;
+
+        $post_image = $request->file('post_image');
+
+        //generate unique id for image
+        $name_gen = hexdec(uniqid());
+
+        //image extention
+        $img_ext = strtolower($post_image->getClientOriginalExtension());
+        $img_name = $name_gen . '.' . $img_ext;
+        $up_location = 'image/post/';
+        $last_img = $up_location . $img_name;
+        $post_image->move($up_location, $img_name);
+
+
         Post::create([
             'title' => $request->title,
             'description' => $request->description,
-            'user_id' => $userID
+            'image' => $last_img,
+            'user_id' => $userID,
+            'created_at' => Carbon::now()
         ]);
-        // $request->validate([
-        //     'title' => 'required',
-        //     'description' => 'required',
-        // ]);
 
-        // post::create($request->all());
 
         return redirect()->route('post.index')
             ->with('success', 'Post created successfully.');
@@ -86,15 +110,57 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-        ]);
+        $request->validate(
+            [
+                'title' => 'required',
+                'description' => 'required',
+            ],
+            [
+                'title.required' => 'Please Enter Post title',
+                'description.required' => 'Please Enter Post description',
+            ]
+        );
 
-        $post->update($request->all());
+        $old_image = $request->old_image;
 
-        return redirect()->route('post.index')
-            ->with('success', 'Post updated successfully');
+        $userID = auth()->user()->id;
+
+        $post_image = $request->file('post_image');
+
+        if ($post_image) {
+            //generate unique id for image
+            $name_gen = hexdec(uniqid());
+
+            //image extention
+            $img_ext = strtolower($post_image->getClientOriginalExtension());
+            $img_name = $name_gen . '.' . $img_ext;
+            $up_location = 'image/post/';
+            $last_img = $up_location . $img_name;
+            $post_image->move($up_location, $img_name);
+
+            unlink($old_image);
+
+            $post->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => $last_img,
+                'user_id' => $userID,
+                'updated_at' => Carbon::now()
+            ]);
+
+            return redirect()->route('post.index')
+                ->with('success', 'Post updated successfully');
+        } else {
+            $post->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'user_id' => $userID,
+                'updated_at' => Carbon::now()
+            ]);
+
+            return redirect()->route('post.index')
+                ->with('success', 'Post updated successfully');
+        }
     }
 
     /**
@@ -103,9 +169,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
-        $post->delete();
+        $post_image = Post::find($id);
+        $old_image = $post_image->image;
+
+        unlink($old_image);
+
+        Post::find($id)->delete();
 
         return redirect()->route('post.index')
             ->with('success', 'Post deleted successfully');

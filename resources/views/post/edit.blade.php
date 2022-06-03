@@ -21,10 +21,11 @@
                 </div>
             @endif
 
-            <form action="{{ route('post.update',$post->id) }}" method="POST">
+            <form action="{{ route('post.update',$post->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
+                <input type="hidden" name="old_image" value="{{ $post->image }}">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
@@ -38,6 +39,17 @@
                             <strong>Description:</strong>
                             <textarea class="form-control" style="height:150px" name="description" placeholder="Enter Description">{{ $post->description }}</textarea>
                         </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <strong>Post Image:</strong>
+                            <input type="file" name="post_image" value="$post->image" class="form-control">
+                        </div>
+                    </div>
+    
+                    <div class="form-group">
+                        <img src="{{ asset($post->image) }}" style="height: 100%; width:10%;" >
                     </div>
 
                     <div class="row mt-2">
