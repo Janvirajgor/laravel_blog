@@ -13,9 +13,14 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Post::latest()->paginate(3);
+        $post = Post::query();
+        if (request('term')) {
+            $post->where('title', 'Like', '%' . request('term') . '%');
+        }
+
+        $data = $post->orderBy('id', 'DESC')->paginate(3);
 
         return view('post.index', compact('data'));
     }

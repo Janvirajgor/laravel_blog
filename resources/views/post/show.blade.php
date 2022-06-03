@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 pt-2">
-                <a href="{{ route('post.index') }}" class="btn btn-outline-primary btn-sm">Go back</a>
+                <a href="{{ route('post.index') }}" class="btn btn-outline-primary btn-sm"> <i class="fas fa-backward "></i> </a>
                 <hr>
                 @if ($post->image)
                     <img src="{{ asset($post->image) }}" style="height: 300px; width:450px;" alt="{{ $post->title }} photo" class="img-fluid">
@@ -21,13 +21,13 @@
 
                 <p>{!! $post->description !!}</p> 
                 <hr>
-                <a href="{{ route('post.edit', $post->id)}}" class="btn btn-outline-primary">Edit Post</a>
+                <a href="{{ route('post.edit', $post->id)}}" class="btn btn-outline-primary"><i class="fas fa-edit  fa-lg"></i>Edit Post</a>
                 <br><br>
 
                 <form id="delete-frm" class="" action="" method="POST">
                     @method('DELETE')
                     @csrf
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete')">Delete Post</button>
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete')"> <i class="fas fa-trash fa-lg"></i> Delete Post</button>
                 </form>
             </div>
         </div>
