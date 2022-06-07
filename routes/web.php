@@ -5,7 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CommentController;
-
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,10 +23,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/profile/{id}', [HomeController::class, 'profile'])->name('profile');
+Route::get('/profile-edit/{id}', [HomeController::class, 'editProfile'])->name('edit');
+Route::put('/profile-update/{id}', [HomeController::class, 'updateProfile'])->name('update');
 
 Route::resource('post', PostController::class);
 
 Route::resource('comments', CommentController::class)->only(['store']);
 
-Route::post('save-likedislike','PostController@save_likedislike');
+Route::post('save-likedislike', 'PostController@save_likedislike');
