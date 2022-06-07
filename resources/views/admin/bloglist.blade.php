@@ -15,21 +15,29 @@
         <title>Blog List</title>
     </head>
     <body>
-        <form action="{{ route('bloglist') }}" method="GET" role="search">
-            <div class="input-group">
-                <input type="text" name="search" id="search" placeholder="Search Blog">
-                <button class="btn btn-success" type="submit" title="Search Blogs">
-                    Search
-                </button>
+        <a href="{{ route('dashboard') }}" class="btn btn-outline-primary btn-sm"> <i class="fas fa-backward "></i> </a>
 
-                <a href="{{ route('bloglist') }}">
-                    <button class="btn btn-danger" type="button" title="Refresh page">
-                        Refresh
-                    </button>
-                </a>
-            </div>
-        </form>
-        
+        <div class=" col-12 d-flex justify-content-sm-end">
+            <form action="{{ route('bloglist') }}" method="GET" role="search">
+                <div class="input-group">
+                    <span class="input-group-btn mr-5 mt-1">
+                        <button class="btn btn-info" type="submit" title="Search projects">
+                            <span class="fas fa-search"></span>
+                        </button>
+                    </span>
+                    <input type="text" class="form-control mr-2" name="search" placeholder="Search Posts" id="search">
+                    <a href="{{ route('bloglist') }}" class=" mt-1">
+                        <span class="input-group-btn">
+                            <button class="btn btn-danger" type="button" title="Refresh page">
+                                <span class="fas fa-sync-alt"></span>
+                            </button>
+                        </span>
+                    </a>
+                </div>
+            </form>
+        </div>
+        <br>
+
         <a class="btn btn-success" href="{{ route('blogcreate') }}" id="createBlog" style="float: right;">AddBlog</a>
 
         <table class="table table-bordered data-table">
@@ -37,7 +45,6 @@
                 <tr>
                     <th width="5%">Id</th>
                     <th width="15%">Title</th>
-                    <th width="10%">Type</th>
                     <th width="35%">Description</th>
                     <th width="15%">Picture</th>
                     <th width="20%">Action</th>
@@ -49,7 +56,6 @@
                 <tr>
                     <td>{{++$i}}</td>
                     <td>{{ $blog['title'] }}</td>
-                    <td>{{ $blog['type'] }}</td>
                     <td class="blog-text">
                         <a href="{{ route('showblog', $blog['id']) }}" id="description">
                             <p>{{ $blog['description'] }}</p>
@@ -60,12 +66,11 @@
                     </td>
                     <td><img src="{{ asset($blog['image']) }}" width="100" height="100" /></td>
                     <td>
-                        <form action="{{ route('blogdestroy', $blog->id) }}" method="POST">
-                            <a href="{{ route('showblog', $blog->id) }}" class="btn btn-info">Show</a>
+                        <form action="{{ route('blogdestroy', $blog->id) }}" method="POST">        
                             <a href="{{ route('blogedit', $blog->id) }}" class="btn btn-primary">Edit</a>
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-danger"  onclick="return confirm('Are you sure to delete')">Delete</button>
                         </form>
                     </td>
                 </tr>
