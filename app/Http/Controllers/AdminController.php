@@ -184,4 +184,30 @@ class AdminController extends Controller
         $users = $user->find($id);
         return view('admin.edituser', compact('users'));
     }
+
+    public function userUpdate(Request $request, User $users, $id)
+    {
+        $user = $users->find($id);
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        $user->find($request->user_id);
+        return redirect()->route('userlist');
+    }
+
+    public function userDestroy(Request $request, User $user, $id)
+    {
+        $users = $user->find($id);
+
+        $users->delete();
+
+        return redirect()->route('userlist');
+    }
 }

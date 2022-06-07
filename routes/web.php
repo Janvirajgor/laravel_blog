@@ -38,5 +38,5 @@ Route::get('/admin/show-user/{id}', [AdminController::class, 'showUser'])->name(
 Route::get('/admin/user-create', [AdminController::class, 'userCreate'])->name('usercreate');
 Route::post('/admin/user-store', [AdminController::class, 'userStore'])->name('userstore');
 Route::get('/admin/user-edit/{id}', [AdminController::class, 'userEdit'])->name('useredit');
-Route::put('/admin/user-update', [AdminController::class, 'userUpdate'])->name('userupdate');
+Route::put('/admin/user-update/{id}', [AdminController::class, 'userUpdate'])->name('userupdate');
 Route::delete('/admin/deleteuser/{id}', [AdminController::class, 'userDestroy'])->name('userdestroy');
