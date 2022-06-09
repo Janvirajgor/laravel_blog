@@ -31,8 +31,10 @@
                     </div>
                   
                     <div class="col-4">
-                        <p>Create new Post</p>
-                        <a href="{{ route('post.create') }}" class="btn btn-primary btn-sm">Add Post</a>
+                        @if(auth()->user())
+                            <p>Create new Post</p>
+                            <a href="{{ route('post.create') }}" class="btn btn-primary btn-sm">Add Post</a>
+                        @endif
                     </div>
                 </div>  
 
