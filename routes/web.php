@@ -6,10 +6,14 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\MailController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('mailing', [MailController::class, 'sendingmail']);
+Route::view('form', 'emails.form');
 
 Auth::routes();
 
